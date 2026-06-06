@@ -15,10 +15,13 @@ match. Architecture:
 Supabase is the database + function host + scheduler. Resend is the actual email
 sender (Supabase only sends its own auth emails). Both have free tiers.
 
-Everything that talks to the database from the server uses the **service-role
-key** and bypasses RLS. The browser only ever uses the **anon key**, which—thanks
-to the RLS policies in `migrations/0001_init.sql`—can *insert* a subscription but
-can't read or change anyone's data.
+Everything that talks to the database from the server uses the **secret /
+service-role key** and bypasses RLS. The browser only ever uses the browser-safe
+key — the **publishable key** (`sb_publishable_...`) in the current Supabase
+dashboard, or the legacy **anon** JWT (`eyJ...`) on older projects. Thanks to the
+RLS policies in `migrations/0001_init.sql`, that key can *insert* a subscription
+but can't read or change anyone's data. Never expose the secret/service_role key
+in the browser.
 
 ---
 
@@ -40,15 +43,22 @@ supabase link --project-ref YOUR_PROJECT_REF
 
 ## 3. Create the schema + seed the fixtures
 
-Either with the CLI:
+**Easiest (no psql):** in the Supabase dashboard → **SQL Editor**, paste and run
+`migrations/0001_init.sql`, then paste and run `seed.sql`.
+
+**Or via the CLI** against your linked cloud project:
 
 ```bash
-supabase db push                       # applies migrations/0001_init.sql
-psql "$(supabase db url)" -f supabase/seed.sql   # loads the 104 matches
+supabase db push   # applies migrations/0001_init.sql to the remote project
+
+# Seed with the project's DIRECT connection string
+# (Project Settings → Database → Connection string → URI). Do NOT use
+# `supabase db url` — that points at the LOCAL dev stack, not your cloud project.
+psql "postgresql://postgres:[YOUR-DB-PASSWORD]@db.YOUR_PROJECT_REF.supabase.co:5432/postgres" \
+  -f supabase/seed.sql
 ```
 
-…or by pasting `migrations/0001_init.sql` then `seed.sql` into the Supabase SQL
-editor. Re-run `node scripts/gen-seed.mjs` first if you ever edit the schedule in
+Re-run `node scripts/gen-seed.mjs` first if you ever edit the schedule in
 `src/data.js`.
 
 ## 4. Set the function secrets
@@ -88,11 +98,24 @@ select * from cron.job_run_details order by start_time desc limit 20;
 
 ```bash
 cp .env.example .env.local
-# fill in REACT_APP_SUPABASE_URL and REACT_APP_SUPABASE_ANON_KEY
+# REACT_APP_SUPABASE_URL      → Project Settings → API → Project URL
+# REACT_APP_SUPABASE_ANON_KEY → the publishable key (sb_publishable_...),
+#                               or the legacy anon JWT (eyJ...). NOT the secret key.
 npm start   # restart so CRA picks up the env vars
 ```
 
 The signup form shows "Demo mode" until these are set.
+
+**Deploying (Vercel/Netlify):** set the same two `REACT_APP_*` vars in the host's
+environment-variable settings. CRA inlines `REACT_APP_*` vars **at build time**, so
+if you add them after the first deploy you must trigger a fresh build/redeploy —
+otherwise the production form stays in "Demo mode". Also set the function's
+`SITE_URL` secret to your deployed URL so email links resolve:
+
+```bash
+supabase secrets set SITE_URL="https://your-deployed-site.com"
+supabase functions deploy send-reminders
+```
 
 ---
 

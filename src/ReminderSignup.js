@@ -29,14 +29,21 @@ export default function ReminderSignup() {
     setStatus("sending");
     setMessage("");
     try {
+      // The new publishable key (sb_publishable_...) is NOT a JWT, so it must
+      // only go in the `apikey` header — sending it as a Bearer token makes the
+      // gateway try to parse it as a JWT and 401. The legacy anon key (eyJ...)
+      // is a JWT and works in both headers.
+      const headers = {
+        "Content-Type": "application/json",
+        apikey: SUPABASE_ANON_KEY,
+        Prefer: "return=minimal,resolution=ignore-duplicates",
+      };
+      if (SUPABASE_ANON_KEY.startsWith("eyJ")) {
+        headers.Authorization = `Bearer ${SUPABASE_ANON_KEY}`;
+      }
       const res = await fetch(`${SUPABASE_URL}/rest/v1/subscriptions`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          Prefer: "return=minimal,resolution=ignore-duplicates",
-        },
+        headers,
         body: JSON.stringify({
           email: email.trim().toLowerCase(),
           minutes_before: minutes,

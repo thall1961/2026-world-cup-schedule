@@ -923,7 +923,8 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.9rem;
+  justify-content: space-between;
+  gap: 1.4rem;
   border-top: 1px solid var(--line);
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -931,8 +932,55 @@
   text-transform: uppercase;
   color: var(--ink-faint);
 }
+.foot__dates {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.9rem;
+}
 .foot__dot { color: var(--line-strong); font-size: 0.5rem; }
 .foot__final { color: var(--gold); }
+.foot__support {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+.foot__support-label {
+  color: var(--ink-faint);
+}
+
+/* ───────────────────── Donate button ───────────────────── */
+.donate {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 200, 61, 0.45);
+  background: linear-gradient(120deg, rgba(255, 200, 61, 0.16), rgba(255, 138, 61, 0.12));
+  color: var(--gold);
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 0.82rem;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+.donate:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(120deg, var(--gold), #ff8a3d);
+  color: #1a1205;
+  box-shadow: 0 14px 30px -12px rgba(255, 170, 61, 0.6);
+}
+.donate__emoji {
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+}
+.donate:hover .donate__emoji {
+  transform: rotate(-12deg) scale(1.12);
+}
 
 /* ───────────────────── Animations ───────────────────── */
 @keyframes rise {

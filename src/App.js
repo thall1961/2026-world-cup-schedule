@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 import ReminderSignup from "./ReminderSignup";
+import DonateButton from "./DonateButton";
 import {
   MATCHES,
   GROUPS,
@@ -428,11 +429,17 @@ export default function App() {
       <ReminderSignup />
 
       <footer className="foot">
-        <span>Group stage · Jun 11 – 27</span>
-        <span className="foot__dot">●</span>
-        <span>Knockouts · Jun 28 – Jul 15</span>
-        <span className="foot__dot">●</span>
-        <span className="foot__final">Final · Jul 19</span>
+        <div className="foot__dates">
+          <span>Group stage · Jun 11 – 27</span>
+          <span className="foot__dot">●</span>
+          <span>Knockouts · Jun 28 – Jul 15</span>
+          <span className="foot__dot">●</span>
+          <span className="foot__final">Final · Jul 19</span>
+        </div>
+        <div className="foot__support">
+          <span className="foot__support-label">Enjoying it?</span>
+          <DonateButton />
+        </div>
       </footer>
     </div>
   );

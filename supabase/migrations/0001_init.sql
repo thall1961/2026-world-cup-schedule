@@ -37,12 +37,14 @@ alter table public.subscriptions  enable row level security;
 alter table public.matches        enable row level security;
 alter table public.sent_reminders enable row level security;
 
--- Anyone (anon) may subscribe, but cannot read or modify existing rows.
--- The Edge Functions use the service-role key, which bypasses RLS.
+-- Anyone with a valid API key may subscribe, but cannot read or modify existing
+-- rows. `to public` covers the anon role and whichever role the publishable key
+-- resolves to. The Edge Functions use the service-role key, which bypasses RLS.
 drop policy if exists "anon can subscribe" on public.subscriptions;
-create policy "anon can subscribe"
+drop policy if exists "anyone can subscribe" on public.subscriptions;
+create policy "anyone can subscribe"
   on public.subscriptions for insert
-  to anon, authenticated
+  to public
   with check (true);
 
 -- Fixtures are public to read (handy if you ever query them client-side).

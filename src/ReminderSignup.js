@@ -29,14 +29,18 @@ export default function ReminderSignup() {
     setStatus("sending");
     setMessage("");
     try {
-      // The new publishable key (sb_publishable_...) is NOT a JWT, so it must
-      // only go in the `apikey` header — sending it as a Bearer token makes the
-      // gateway try to parse it as a JWT and 401. The legacy anon key (eyJ...)
-      // is a JWT and works in both headers.
+      // Plain INSERT only — do NOT use `resolution=ignore-duplicates`. That turns
+      // the request into an upsert (ON CONFLICT), which makes Postgres evaluate
+      // the UPDATE/SELECT RLS path too; our insert-only policy then trips RLS
+      // (401 / 42501). A repeat email instead returns a harmless 409, handled below.
+      //
+      // The publishable key (sb_publishable_...) is NOT a JWT, so it goes in the
+      // `apikey` header only; the legacy anon key (eyJ...) is a JWT and also works
+      // as a Bearer token.
       const headers = {
         "Content-Type": "application/json",
         apikey: SUPABASE_ANON_KEY,
-        Prefer: "return=minimal,resolution=ignore-duplicates",
+        Prefer: "return=minimal",
       };
       if (SUPABASE_ANON_KEY.startsWith("eyJ")) {
         headers.Authorization = `Bearer ${SUPABASE_ANON_KEY}`;

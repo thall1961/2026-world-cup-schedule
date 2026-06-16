@@ -310,6 +310,23 @@
 }
 .day {
   margin-bottom: 2.8rem;
+  /* Clear the sticky controls bar when auto-scrolled / anchor-linked. */
+  scroll-margin-top: 160px;
+}
+.day--today .day__num {
+  color: var(--magenta);
+}
+.day__today {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #0a0c16;
+  background: var(--magenta);
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
 }
 .day__head {
   display: flex;

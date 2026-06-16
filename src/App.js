@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import ReminderSignup from "./ReminderSignup";
 import DonateButton from "./DonateButton";
@@ -24,6 +24,15 @@ const KO_ROUNDS = [
 ];
 
 const matchCode = (id) => `M${String(id).padStart(3, "0")}`;
+
+// Today's date as a YYYY-MM-DD string in the viewer's local time, so it
+// compares directly against the match `date` strings.
+function todayStr() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
+    d.getDate()
+  ).padStart(2, "0")}`;
+}
 
 function scrollToReminders(e) {
   e.preventDefault();
@@ -218,6 +227,10 @@ export default function App() {
     localStorage.setItem(FAV_KEY, JSON.stringify([...fav]));
   }, [fav]);
 
+  // Auto-scroll the schedule to today's matches (or the next upcoming day) on
+  // first load, so visitors land on what's relevant instead of the top.
+  const didAutoScroll = useRef(false);
+
   const toggleFav = (team) =>
     setFav((prev) => {
       const next = new Set(prev);
@@ -246,6 +259,26 @@ export default function App() {
     }
     return [...map.entries()];
   }, [filtered]);
+
+  const today = todayStr();
+
+  useEffect(() => {
+    if (view !== "schedule" || didAutoScroll.current || days.length === 0) return;
+    didAutoScroll.current = true;
+
+    // First day on or after today; falls back to nothing if the tournament is over.
+    const target = days.find(([date]) => date >= today);
+    if (!target) return;
+
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Let layout/fonts settle before measuring, then glide to the day.
+    const t = window.setTimeout(() => {
+      document
+        .getElementById(`day-${target[0]}`)
+        ?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    }, reduce ? 0 : 180);
+    return () => window.clearTimeout(t);
+  }, [view, days, today]);
 
   const matchCounter = { current: 0 };
 
@@ -394,8 +427,13 @@ export default function App() {
 
         {days.map(([date, matches]) => {
           const f = formatDate(date);
+          const isToday = date === today;
           return (
-            <section className="day" key={date}>
+            <section
+              className={`day ${isToday ? "day--today" : ""}`}
+              key={date}
+              id={`day-${date}`}
+            >
               <div className="day__head">
                 <div className="day__date">
                   <span className="day__num">{f.day}</span>
@@ -407,6 +445,7 @@ export default function App() {
                 <span className="day__count">
                   {matches.length} {matches.length === 1 ? "match" : "matches"}
                 </span>
+                {isToday && <span className="day__today">Today</span>}
                 <span className="day__line" />
               </div>
               <div className="day__matches">

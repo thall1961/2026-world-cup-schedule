@@ -69,6 +69,48 @@
       }
     </script>
 
+    <!-- FAQ structured data: eligible for Google rich results -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "When does the 2026 World Cup start?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The FIFA World Cup 2026 starts on June 11, 2026 with the opening match in Mexico City, and the final is on July 19, 2026 in New York / New Jersey."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Where is the 2026 World Cup being held?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "The 2026 World Cup is hosted across the United States, Canada and Mexico, with matches played in 16 host cities."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How many teams and matches are in the 2026 World Cup?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "It is the first 48-team World Cup, with 48 nations drawn into 12 groups playing a total of 104 matches over 39 days."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "How can I get reminders for World Cup 2026 matches?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "You can sign up for free email match reminders on summerofgoals.com and star your favourite teams to be notified before each of their games."
+            }
+          }
+        ]
+      }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -93,8 +135,76 @@
     <title>World Cup 2026 Schedule — All 104 Matches, Groups to Final</title>
   </head>
   <body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
+    <noscript>
+      The interactive schedule needs JavaScript, but here are the essentials:
+      the FIFA World Cup 2026 runs June 11 – July 19, 2026 across the USA,
+      Canada and Mexico — 104 matches, 48 nations, 16 host cities, with the
+      final on July 19 in New York / New Jersey.
+    </noscript>
+
+    <!--
+      Crawlable content shell. React (createRoot.render) replaces everything
+      inside #root the moment the app mounts, so JS visitors never see this.
+      Non-JS crawlers read it as the page's main content: it supplies the H1,
+      real descriptive copy, internal links and heading structure that a
+      single-page React app otherwise hides from them.
+    -->
+    <div id="root">
+      <main style="max-width:960px;margin:0 auto;padding:48px 24px;color:#e8e9f3;font-family:'Archivo',system-ui,sans-serif;line-height:1.6;">
+        <p style="font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:#b9ff3d;margin:0 0 8px;">FIFA World Cup · North America</p>
+        <h1 style="font-size:2.4rem;line-height:1.1;margin:0 0 16px;">World Cup 2026 Schedule — All 104 Matches, Groups to Final</h1>
+        <p>
+          The complete <strong>FIFA World Cup 2026 schedule</strong> and fixtures, from
+          the opening match in Mexico City on June 11, 2026 to the final on July 19,
+          2026 in New&nbsp;Jersey. The 2026 World Cup is the first 48-team edition and
+          the first hosted across three countries — the United States, Canada and
+          Mexico — with 104 matches played in 16 host cities over 39 days. Browse every
+          kickoff, filter by group or stage, star your favourite teams, and sign up for
+          free match reminders so you never miss a game.
+        </p>
+
+        <p>
+          <a href="#reminders" style="color:#b9ff3d;font-weight:600;">Get free match reminders</a> ·
+          <a href="https://summerofgoals.com/" style="color:#b9ff3d;font-weight:600;">Full interactive schedule &amp; bracket</a>
+        </p>
+
+        <h2 style="font-size:1.4rem;margin:32px 0 8px;">Group stage draw — all 12 groups</h2>
+        <ul style="padding-left:1.2em;">
+          <li><strong>Group A:</strong> Mexico, South Africa, South Korea, Czechia</li>
+          <li><strong>Group B:</strong> Canada, Bosnia and Herzegovina, Qatar, Switzerland</li>
+          <li><strong>Group C:</strong> Brazil, Morocco, Haiti, Scotland</li>
+          <li><strong>Group D:</strong> USA, Paraguay, Australia, Türkiye</li>
+          <li><strong>Group E:</strong> Germany, Curaçao, Ivory Coast, Ecuador</li>
+          <li><strong>Group F:</strong> Netherlands, Japan, Sweden, Tunisia</li>
+          <li><strong>Group G:</strong> Belgium, Egypt, Iran, New Zealand</li>
+          <li><strong>Group H:</strong> Spain, Cabo Verde, Saudi Arabia, Uruguay</li>
+          <li><strong>Group I:</strong> France, Senegal, Iraq, Norway</li>
+          <li><strong>Group J:</strong> Argentina, Algeria, Austria, Jordan</li>
+          <li><strong>Group K:</strong> Portugal, DR Congo, Uzbekistan, Colombia</li>
+          <li><strong>Group L:</strong> England, Croatia, Ghana, Panama</li>
+        </ul>
+
+        <h2 style="font-size:1.4rem;margin:32px 0 8px;">16 host cities</h2>
+        <p>
+          Atlanta, Boston, Dallas, Guadalajara, Houston, Kansas City, Los Angeles,
+          Mexico City, Miami, Monterrey, New York / New Jersey, Philadelphia,
+          San Francisco Bay Area, Seattle, Toronto and Vancouver.
+        </p>
+
+        <h2 style="font-size:1.4rem;margin:32px 0 8px;">Key dates &amp; rounds</h2>
+        <ul style="padding-left:1.2em;">
+          <li>Group stage: June 11 – 27, 2026</li>
+          <li>Round of 32: June 28 – July 3, 2026</li>
+          <li>Round of 16: July 4 – 7, 2026</li>
+          <li>Quarter-finals: July 9 – 11, 2026</li>
+          <li>Semi-finals: July 14 – 15, 2026</li>
+          <li>Third place play-off: July 18, 2026</li>
+          <li>Final: July 19, 2026 — New York / New Jersey</li>
+        </ul>
+
+        <p style="margin-top:32px;color:#8a8ca0;">Loading the interactive World Cup 2026 schedule…</p>
+      </main>
+    </div>
     <!--
       This HTML file is a template.
       If you open it directly in the browser, you will see an empty page.

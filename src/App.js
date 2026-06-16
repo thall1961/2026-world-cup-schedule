@@ -121,6 +121,16 @@ function MatchCard({ match, fav, onToggleFav, index }) {
         <span className="card__num">M{String(match.id).padStart(3, "0")}</span>
         {isFinal && <span className="card__trophy" aria-hidden="true">🏆</span>}
       </div>
+
+      {match.city && (
+        <div className="card__venue">
+          <span className="card__venue-pin" aria-hidden="true">📍</span>
+          <span className="card__venue-city">{match.city}</span>
+          {match.stadium && (
+            <span className="card__venue-stadium">{match.stadium}</span>
+          )}
+        </div>
+      )}
     </article>
   );
 }
@@ -150,6 +160,17 @@ function Bout({ match, feeders, isFinal, isThird }) {
           <span className="bout__pin" aria-hidden="true">?</span>
           <span className="bout__feed">{feeders[1]}</span>
         </div>
+        {match.city && (
+          <div className="bout__city">
+            <span aria-hidden="true">📍</span>
+            <span>
+              {match.city}
+              {match.stadium && (
+                <span className="bout__stadium">{match.stadium}</span>
+              )}
+            </span>
+          </div>
+        )}
         {isFinal && <span className="bout__crown" aria-hidden="true">🏆</span>}
       </div>
     </div>

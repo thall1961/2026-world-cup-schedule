@@ -446,6 +446,38 @@
 .card--ko .card__tag { color: var(--magenta); }
 .card--final .card__tag { color: var(--gold); }
 
+.card__venue {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.15rem;
+  padding: 0.5rem 1.1rem 0 1.1rem;
+  border-top: 1px solid var(--line);
+}
+.card__venue-pin {
+  font-size: 0.7rem;
+  line-height: 1;
+  filter: grayscale(0.2);
+}
+.card__venue-city {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.card__venue-stadium {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.04em;
+  color: var(--ink-faint);
+}
+.card__venue-stadium::before {
+  content: "·";
+  margin-right: 0.4rem;
+}
+
 .card__teams {
   display: flex;
   flex-direction: column;
@@ -723,6 +755,26 @@
   white-space: nowrap;
 }
 .bout__when i { margin: 0 0.3em; font-style: normal; }
+.bout__city {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+  margin-top: 0.1rem;
+  padding-top: 0.3rem;
+  border-top: 1px dashed var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+}
+.bout__stadium {
+  display: block;
+  margin-top: 0.12rem;
+  letter-spacing: 0.03em;
+  text-transform: none;
+  color: var(--ink-faint);
+}
 .bout__slot {
   display: flex;
   align-items: center;

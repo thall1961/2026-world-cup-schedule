@@ -1,9 +1,0 @@
-project_id = "world-cup-schedule"
-
-[functions.send-reminders]
-# Triggered by pg_cron, not end users — it authenticates with x-cron-secret instead.
-verify_jwt = false
-
-[functions.unsubscribe]
-# Reached directly from a link in the email.
-verify_jwt = false

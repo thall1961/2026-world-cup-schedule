@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
-import ReminderSignup from "./ReminderSignup";
 import DonateButton from "./DonateButton";
 import {
   MATCHES,
@@ -32,17 +31,6 @@ function todayStr() {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
     d.getDate()
   ).padStart(2, "0")}`;
-}
-
-function scrollToReminders(e) {
-  e.preventDefault();
-  const el = document.getElementById("reminders");
-  if (!el) return;
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  el.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
-  // Move focus to the email field once the scroll settles.
-  const focusEmail = () => document.getElementById("remind-email")?.focus({ preventScroll: true });
-  reduce ? focusEmail() : window.setTimeout(focusEmail, 600);
 }
 
 function Flag({ team }) {
@@ -334,11 +322,6 @@ export default function App() {
           <Stat n="12" l="Groups" />
           <Stat n="39" l="Days" />
         </div>
-        <a className="hero__cta" href="#reminders" onClick={scrollToReminders}>
-          <span className="hero__cta-bell" aria-hidden="true">🔔</span>
-          Get match reminders
-          <span className="hero__cta-arrow" aria-hidden="true">↓</span>
-        </a>
       </header>
 
       <nav className="controls">
@@ -485,8 +468,6 @@ export default function App() {
         })}
       </main>
       )}
-
-      <ReminderSignup />
 
       <footer className="foot">
         <div className="foot__dates">

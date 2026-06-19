@@ -399,6 +399,13 @@
   letter-spacing: 0.02em;
   white-space: nowrap;
 }
+.card__tz {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  color: var(--ink-faint);
+  line-height: 1;
+}
 .card__tag {
   font-family: var(--font-mono);
   font-size: 0.55rem;
@@ -588,6 +595,35 @@
   text-transform: uppercase;
   color: var(--ink-faint);
 }
+.tzswitch {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.tzswitch__label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+.tzswitch__btn {
+  border: 1px solid var(--line-strong);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--ink-dim);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+  padding: 0.3rem 0.7rem;
+  border-radius: 999px;
+  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+.tzswitch__btn.is-on {
+  color: #07090f;
+  background: var(--lime);
+  border-color: var(--lime);
+}
 
 /* ───────────────────── Bracket ───────────────────── */
 .bracketview {
@@ -719,6 +755,7 @@
   white-space: nowrap;
 }
 .bout__when i { margin: 0 0.3em; font-style: normal; }
+.bout__tz { margin-left: 0.35em; opacity: 0.7; }
 .bout__city {
   display: flex;
   align-items: baseline;

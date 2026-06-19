@@ -105,6 +105,26 @@ const k = (stage, date, time, city) => ({
 // Jun–Jul 2026 window. Change this single offset to re-anchor the schedule.
 export const TZ_OFFSET = "-05:00";
 
+// IANA zone the source times are anchored to; used as the "Central" option.
+export const CT_TZ = "America/Chicago";
+
+// Render a match's absolute kickoff instant in a given IANA time zone.
+// Pass `timeZone` undefined to use the viewer's local zone. Returns the
+// clock time (e.g. "2:00 PM") and the short zone label (e.g. "CDT", "EDT").
+export function formatKickoff(kickoffISO, timeZone) {
+  const opts = { hour: "numeric", minute: "2-digit", timeZoneName: "short" };
+  if (timeZone) opts.timeZone = timeZone;
+  const parts = new Intl.DateTimeFormat("en-US", opts).formatToParts(
+    new Date(kickoffISO)
+  );
+  const part = {};
+  for (const p of parts) part[p.type] = p.value;
+  return {
+    time: `${part.hour}:${part.minute} ${part.dayPeriod}`,
+    zone: part.timeZoneName || "",
+  };
+}
+
 function toKickoffISO(date, time) {
   const [clock, ampm] = time.split(" ");
   let [h, m] = clock.split(":").map(Number);

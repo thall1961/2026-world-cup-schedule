@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useRef, useState } from "react";
 import "./App.css";
 import DonateButton from "./DonateButton";
 import {
@@ -7,11 +7,20 @@ import {
   STAGES,
   STAGE_ORDER,
   TEAMS,
+  CT_TZ,
   formatDate,
+  formatKickoff,
 } from "./data";
 
 const GROUP_KEYS = Object.keys(GROUPS);
 const FAV_KEY = "wc26-favorites";
+const TZ_KEY = "wc26-tz";
+
+// Active kickoff time zone for the whole tree: an IANA zone string, or
+// undefined to use the viewer's local zone. Avoids prop-drilling through
+// the bracket into every Bout/MatchCard.
+const TzContext = createContext(undefined);
+const useKickoff = (kickoffISO) => formatKickoff(kickoffISO, useContext(TzContext));
 
 // Columns of the knockout tree, widest round first.
 const KO_ROUNDS = [
@@ -72,6 +81,7 @@ function MatchCard({ match, fav, onToggleFav, index }) {
   const isFinal = match.stage === "final";
   const involvesFav =
     fav.has(match.home) || fav.has(match.away);
+  const kickoff = useKickoff(match.kickoffISO);
 
   return (
     <article
@@ -81,7 +91,8 @@ function MatchCard({ match, fav, onToggleFav, index }) {
       style={{ "--i": index }}
     >
       <div className="card__time">
-        <span className="card__time-val">{match.time}</span>
+        <span className="card__time-val">{kickoff.time}</span>
+        {kickoff.zone && <span className="card__tz">{kickoff.zone}</span>}
         <span className="card__tag">
           {match.group ? `Group ${match.group}` : STAGES[match.stage].label}
         </span>
@@ -125,6 +136,7 @@ function MatchCard({ match, fav, onToggleFav, index }) {
 
 function Bout({ match, feeders, isFinal, isThird }) {
   const f = formatDate(match.date);
+  const kickoff = useKickoff(match.kickoffISO);
   return (
     <div className="bout">
       <div
@@ -137,7 +149,8 @@ function Bout({ match, feeders, isFinal, isThird }) {
           <span className="bout__when">
             {f.monthShort} {f.day}
             <i>·</i>
-            {match.time}
+            {kickoff.time}
+            {kickoff.zone && <span className="bout__tz">{kickoff.zone}</span>}
           </span>
         </div>
         <div className="bout__slot">
@@ -231,10 +244,27 @@ export default function App() {
       return new Set();
     }
   });
+  // "local" → viewer's own zone; "ct" → the schedule's source US Central time.
+  const [tzMode, setTzMode] = useState(() => {
+    try {
+      return localStorage.getItem(TZ_KEY) === "ct" ? "ct" : "local";
+    } catch {
+      return "local";
+    }
+  });
+  const activeTz = tzMode === "ct" ? CT_TZ : undefined;
 
   useEffect(() => {
     localStorage.setItem(FAV_KEY, JSON.stringify([...fav]));
   }, [fav]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(TZ_KEY, tzMode);
+    } catch {
+      /* ignore quota/availability errors */
+    }
+  }, [tzMode]);
 
   // Auto-scroll the schedule to today's matches (or the next upcoming day) on
   // first load, so visitors land on what's relevant instead of the top.
@@ -292,6 +322,7 @@ export default function App() {
   const matchCounter = { current: 0 };
 
   return (
+    <TzContext.Provider value={activeTz}>
     <div className="app">
       <div className="atmosphere" aria-hidden="true">
         <div className="glow glow--lime" />
@@ -355,6 +386,25 @@ export default function App() {
               Knockout tree — slots fill in as the group stage finishes
             </span>
           )}
+          <div className="tzswitch" role="group" aria-label="Kickoff time zone">
+            <span className="tzswitch__label">Times</span>
+            <button
+              type="button"
+              className={`tzswitch__btn ${tzMode === "local" ? "is-on" : ""}`}
+              aria-pressed={tzMode === "local"}
+              onClick={() => setTzMode("local")}
+            >
+              My time
+            </button>
+            <button
+              type="button"
+              className={`tzswitch__btn ${tzMode === "ct" ? "is-on" : ""}`}
+              aria-pressed={tzMode === "ct"}
+              onClick={() => setTzMode("ct")}
+            >
+              Central
+            </button>
+          </div>
         </div>
 
         {view === "schedule" && (
@@ -483,6 +533,7 @@ export default function App() {
         </div>
       </footer>
     </div>
+    </TzContext.Provider>
   );
 }
 

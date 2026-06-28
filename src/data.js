@@ -90,14 +90,15 @@ const g = (group, date, time, home, away, city) => ({
   city,
 });
 
-// Helper to build a knockout (TBD) match
-const k = (stage, date, time, city) => ({
+// Helper to build a knockout match. Teams are filled in as groups conclude;
+// pass home/away once known, otherwise they default to null (TBD).
+const k = (stage, date, time, city, home = null, away = null) => ({
   stage,
   group: null,
   date,
   time,
-  home: null,
-  away: null,
+  home,
+  away,
   city,
 });
 
@@ -251,21 +252,21 @@ export const MATCHES = [
   g("J", "2026-06-27", "9:00 PM", "Jordan", "Argentina", "Dallas"),
 
   // ── Round of 32 ──
-  k("r32", "2026-06-28", "2:00 PM", "Los Angeles"),
-  k("r32", "2026-06-29", "12:00 PM", "Boston"),
-  k("r32", "2026-06-29", "3:30 PM", "Monterrey"),
-  k("r32", "2026-06-29", "8:00 PM", "Houston"),
-  k("r32", "2026-06-30", "12:00 PM", "New York / New Jersey"),
+  k("r32", "2026-06-28", "2:00 PM", "Los Angeles", "South Africa", "Canada"),
+  k("r32", "2026-06-29", "12:00 PM", "Boston", "Brazil", "Japan"),
+  k("r32", "2026-06-29", "3:30 PM", "Monterrey", "Germany", null),
+  k("r32", "2026-06-29", "8:00 PM", "Houston", "Netherlands", "Morocco"),
+  k("r32", "2026-06-30", "12:00 PM", "New York / New Jersey", "Ivory Coast", null),
   k("r32", "2026-06-30", "4:00 PM", "Dallas"),
-  k("r32", "2026-06-30", "8:00 PM", "Mexico City"),
+  k("r32", "2026-06-30", "8:00 PM", "Mexico City", "Mexico", null),
   k("r32", "2026-07-01", "11:00 AM", "Atlanta"),
   k("r32", "2026-07-01", "3:00 PM", "San Francisco Bay Area"),
-  k("r32", "2026-07-01", "7:00 PM", "Seattle"),
+  k("r32", "2026-07-01", "7:00 PM", "Seattle", "USA", "Bosnia and Herzegovina"),
   k("r32", "2026-07-02", "2:00 PM", "Toronto"),
   k("r32", "2026-07-02", "6:00 PM", "Los Angeles"),
-  k("r32", "2026-07-02", "10:00 PM", "Vancouver"),
-  k("r32", "2026-07-03", "1:00 PM", "Miami"),
-  k("r32", "2026-07-03", "5:00 PM", "Kansas City"),
+  k("r32", "2026-07-02", "10:00 PM", "Vancouver", "Switzerland", null),
+  k("r32", "2026-07-03", "1:00 PM", "Miami", "Australia", null),
+  k("r32", "2026-07-03", "5:00 PM", "Kansas City", "Argentina", null),
   k("r32", "2026-07-03", "8:30 PM", "Dallas"),
 
   // ── Round of 16 ──

@@ -296,6 +296,11 @@ export default function App() {
       if (!map.has(m.date)) map.set(m.date, []);
       map.get(m.date).push(m);
     }
+    // Display each day chronologically; the source array is ordered by FIFA
+    // match number, which isn't always time-sorted within knockout days.
+    for (const list of map.values()) {
+      list.sort((a, b) => a.kickoffISO.localeCompare(b.kickoffISO));
+    }
     return [...map.entries()];
   }, [filtered]);
 
